@@ -1,0 +1,657 @@
+/* ==========================================================================
+   Cozy Campus Coffee - E-Commerce Stylesheet
+   CS 202 Web Development - Final Project
+   ==========================================================================
+   This stylesheet uses CSS custom properties (variables) for theming.
+   The dark/light mode toggle just swaps the values of these variables!
+   Pretty cool right? - no need to write separate styles for each mode.
+   ========================================================================== */
+
+/* ---------- CSS VARIABLES (THEME COLORS) ---------- */
+/* These are like variables in any programming language - define once, use everywhere! */
+:root {
+  /* Light mode colors (default) */
+  --bg-primary: #fdf6ec;
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --text-primary: #2c1810;
+  --text-secondary: #5a3e2b;
+  --text-muted: #8b6f5a;
+  --accent: #d4760a;
+  --accent-hover: #b8620a;
+  --accent-light: #fef3e2;
+  --border-color: #e8ddd3;
+  --shadow: rgba(44, 24, 16, 0.1);
+  --shadow-hover: rgba(44, 24, 16, 0.2);
+  --navbar-bg: rgba(253, 246, 236, 0.95);
+  --cart-bg: #ffffff;
+  --overlay: rgba(0, 0, 0, 0.5);
+  --badge-bg: #e74c3c;
+  --success: #27ae60;
+  --hero-gradient: linear-gradient(135deg, #d4760a 0%, #8b4513 100%);
+}
+
+/* Dark mode - just override the variables! This is the magic of CSS variables */
+body.dark-mode {
+  --bg-primary: #1a1210;
+  --bg-secondary: #2c1f1a;
+  --bg-card: #352520;
+  --text-primary: #f5e6d3;
+  --text-secondary: #d4b896;
+  --text-muted: #a08060;
+  --accent: #e8943a;
+  --accent-hover: #f0a850;
+  --accent-light: #3d2a1a;
+  --border-color: #4a352a;
+  --shadow: rgba(0, 0, 0, 0.3);
+  --shadow-hover: rgba(0, 0, 0, 0.5);
+  --navbar-bg: rgba(26, 18, 16, 0.95);
+  --cart-bg: #2c1f1a;
+  --overlay: rgba(0, 0, 0, 0.7);
+  --badge-bg: #e74c3c;
+  --success: #2ecc71;
+  --hero-gradient: linear-gradient(135deg, #3d2a1a 0%, #1a1210 100%);
+}
+
+/* ---------- GLOBAL RESET & BASE STYLES ---------- */
+/* Classic reset - removing default browser margins/padding */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  /* Smooth transition when switching themes - looks really nice! */
+}
+
+/* ---------- NAVBAR STYLES ---------- */
+/* The navbar is fixed at the top so it's always visible */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: var(--navbar-bg);
+  backdrop-filter: blur(10px);
+  /* backdrop-filter gives it that frosted glass effect - learned this in week 8! */
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.8rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navbar-brand span {
+  font-size: 1.8rem;
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Theme toggle button - the sun/moon icon */
+.theme-toggle {
+  background: none;
+  border: 2px solid var(--border-color);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  color: var(--text-primary);
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+  transform: rotate(20deg);
+  /* Little rotation animation on hover - fun detail! */
+}
+
+/* Cart button with item counter badge */
+.cart-btn {
+  position: relative;
+  background: none;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+.cart-btn:hover {
+  border-color: var(--accent);
+  background-color: var(--accent-light);
+}
+
+/* The little red badge showing how many items are in the cart */
+.cart-count {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: var(--badge-bg);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+/* When the count updates, it does a little bounce animation */
+.cart-count.bounce {
+  animation: bounce 0.3s ease;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+}
+
+/* ---------- HERO SECTION ---------- */
+/* The big banner at the top of the page */
+.hero {
+  margin-top: 70px;
+  /* Pushed down by the fixed navbar height */
+  background: var(--hero-gradient);
+  padding: 5rem 2rem;
+  text-align: center;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.3;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-emoji {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- PRODUCTS SECTION ---------- */
+/* This is the main content area with the product grid */
+.products-section {
+  padding: 4rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2rem;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+  text-align: center;
+  color: var(--text-muted);
+  margin-bottom: 3rem;
+  font-size: 1.1rem;
+}
+
+/* CSS Grid for the product layout - this is the modern way to do grids!
+   Much better than floats or inline-block hacks from the old days */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+/* ---------- PRODUCT CARD ---------- */
+/* Each product card has an image, title, description, price, and button */
+.product-card {
+  background-color: var(--bg-card);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 12px var(--shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  /* Card lifts up on hover - subtle but effective! */
+  box-shadow: 0 8px 24px var(--shadow-hover);
+}
+
+.product-image {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5rem;
+  background: var(--accent-light);
+  /* Using emoji as product images - simple but effective for a demo! */
+}
+
+.product-info {
+  padding: 1.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.product-description {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  flex-grow: 1;
+  /* flex-grow: 1 pushes the button to the bottom */
+}
+
+.product-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.product-price {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* The "Add to Cart" button */
+.add-to-cart-btn {
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.add-to-cart-btn:hover {
+  background-color: var(--accent-hover);
+  transform: scale(1.05);
+}
+
+.add-to-cart-btn:active {
+  transform: scale(0.95);
+  /* Pressing effect when clicked */
+}
+
+/* "Added!" feedback animation */
+.add-to-cart-btn.added {
+  background-color: var(--success);
+}
+
+/* ---------- CART SIDEBAR (SLIDE-OUT) ---------- */
+/* This is the cart panel that slides in from the right */
+.cart-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--overlay);
+  z-index: 2000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.cart-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.cart-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 400px;
+  max-width: 90vw;
+  height: 100vh;
+  background-color: var(--cart-bg);
+  z-index: 2001;
+  transform: translateX(100%);
+  /* Starts off-screen to the right */
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -4px 0 20px var(--shadow);
+}
+
+.cart-sidebar.open {
+  transform: translateX(0);
+  /* Slides into view */
+}
+
+.cart-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cart-header h2 {
+  font-size: 1.4rem;
+  color: var(--text-primary);
+}
+
+.cart-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.cart-close-btn:hover {
+  color: var(--text-primary);
+  background-color: var(--accent-light);
+}
+
+/* Cart items list */
+.cart-items {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 1rem 1.5rem;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.cart-item-emoji {
+  font-size: 2.5rem;
+  width: 50px;
+  text-align: center;
+}
+
+.cart-item-details {
+  flex-grow: 1;
+}
+
+.cart-item-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.cart-item-price {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* Quantity controls (+ and - buttons) */
+.cart-item-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.qty-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.qty-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.cart-item-qty {
+  font-weight: 600;
+  min-width: 20px;
+  text-align: center;
+  color: var(--text-primary);
+}
+
+/* Remove individual item button */
+.remove-item-btn {
+  background: none;
+  border: none;
+  color: var(--badge-bg);
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 0.3rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.remove-item-btn:hover {
+  background-color: rgba(231, 76, 60, 0.1);
+}
+
+/* Cart footer with total and checkout */
+.cart-footer {
+  padding: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
+}
+
+.cart-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.cart-total-price {
+  color: var(--accent);
+  font-size: 1.4rem;
+}
+
+.checkout-btn {
+  width: 100%;
+  padding: 0.9rem;
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.checkout-btn:hover {
+  background-color: var(--accent-hover);
+}
+
+/* Empty cart message */
+.cart-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-muted);
+}
+
+.cart-empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+/* ---------- FOOTER ---------- */
+.site-footer {
+  background-color: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.site-footer a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- TOAST NOTIFICATION ---------- */
+/* Little notification that pops up when you add something to cart */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background-color: var(--success);
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  z-index: 3000;
+  opacity: 0;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ---------- RESPONSIVE DESIGN ---------- */
+/* Making it look good on mobile - important for the grade! */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0.8rem 1rem;
+  }
+
+  .navbar-brand {
+    font-size: 1.1rem;
+  }
+
+  .hero {
+    padding: 3rem 1.5rem;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .hero p {
+    font-size: 1rem;
+  }
+
+  .products-section {
+    padding: 2rem 1rem;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .cart-sidebar {
+    width: 100%;
+    max-width: 100vw;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cart-btn span.cart-text {
+    display: none;
+    /* Hide the "Cart" text on small screens, just show the icon */
+  }
+}
